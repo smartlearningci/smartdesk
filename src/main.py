@@ -50,8 +50,9 @@ def create_app(path=None, secret=None):
             return await http_exception_handler(request, exc)
         if exc.status_code == 401:
             return RedirectResponse("/login", status_code=303)
-        return render(request, "error.html", status_code=exc.status_code,
-                      message=str(exc.detail))
+        response = render(request, "error.html", message=str(exc.detail))
+        response.status_code = exc.status_code
+        return response
 
     @app.get("/")
     def home():

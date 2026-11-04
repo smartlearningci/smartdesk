@@ -2,10 +2,12 @@
 
 Cada teste começa com uma base nova. Nenhum teste modifica dados reais.
 """
+import os
 import pytest
 from fastapi.testclient import TestClient
 from src.database import connect, initialize
 from src.auth import hash_password
+os.environ.setdefault('SMARTDESK_SESSION_SECRET', 'test-only-session-secret-at-least-32-characters')
 from src.main import create_app
 
 @pytest.fixture
