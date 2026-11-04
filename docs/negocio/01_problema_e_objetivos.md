@@ -44,9 +44,11 @@ Existirão três perfis: colaborador, técnico de suporte e responsável de TI.
 
 Ficam excluídos do MVP a aplicação móvel, notificações SMS, resolução automática com inteligência artificial, integração com email e gestão complexa de SLA (prazos de serviço).
 
-## 5. Decisões ainda necessárias
+## 5. Decisões consolidadas
 
-- Os colaboradores podem consultar apenas os seus próprios tickets?
-- Quem pode fechar um ticket: o colaborador, o técnico ou ambos?
-- Como serão definidos os critérios de prioridade dos pedidos?
-- Que informação será obrigatória na criação de um ticket?
+- **Consulta:** colaborador vê apenas os próprios tickets; técnico vê os atribuídos; Sofia vê todos (RF-003).
+- **Fecho:** apenas Sofia fecha tickets Resolvidos após verificar a resolução; não se exige confirmação formal de Ana (RF-008).
+- **Campos obrigatórios:** título, descrição e categoria (RF-002).
+- **Prioridades:** P0/P1 organizam o desenvolvimento; não há prioridade atribuída aos tickets no MVP.
+
+**Pendente de concretização operacional:** condições de medição do objetivo provisório de três segundos (RNF-002). Ver [requisitos](../produto/02_requisitos_e_user_stories.md) e [MVP](../produto/03_mvp_backlog_e_aceitacao.md).

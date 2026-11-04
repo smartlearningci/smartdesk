@@ -32,6 +32,7 @@ Funcionalidade: MVP SmartDesk
     Então Miguel fica identificado como responsável
     Quando Sofia reatribui o ticket a outro técnico
     Então o novo técnico fica identificado como responsável
+    E o estado do ticket mantém-se "Aberto"
 
   Cenário: US-005 - Consultar tickets atribuídos
     Dado que Miguel iniciou sessão como técnico
@@ -64,23 +65,22 @@ Funcionalidade: MVP SmartDesk
     Dado que Sofia iniciou sessão como responsável de TI
     E existe um ticket no estado "Resolvido"
     Quando consulta a solução registada
-    E confirma a resolução
+    E confirma a resolução sem exigir confirmação formal de Ana
     E fecha o ticket
     Então o estado passa a "Fechado"
 
   Cenário: US-010 - Validar campos obrigatórios
     Dado que Ana iniciou sessão
-    Quando tenta criar um ticket sem título
+    Quando tenta criar um ticket sem um dos campos obrigatórios título, descrição ou categoria
     Então o ticket não é criado
-    E o campo obrigatório é identificado
+    E o campo em falta é identificado
     E é apresentada uma mensagem clara
 
   Cenário: US-011 - Verificar desempenho
     Dado que Miguel iniciou sessão
-    E existem tickets atribuídos a Miguel
-    Quando consulta a lista de tickets
-    Então a página responde em até 3 segundos
-    E apresenta os tickets atribuídos
+    E estão documentadas as condições de medição no ambiente local de demonstração
+    Quando acede às páginas principais de autenticação, criação e consulta de tickets
+    Então cada página responde em até 3 segundos
 
   Esquema do Cenário: US-012 - Compatibilidade
     Dado que Ana utiliza o navegador "<navegador>"

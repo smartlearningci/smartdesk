@@ -10,7 +10,7 @@ O MVP SmartDesk permite demonstrar um percurso completo de suporte informático:
 2. **Sofia** consulta o pedido e atribui-o a **Miguel** — estado **Aberto**.
 3. **Miguel** consulta o ticket e inicia o tratamento — estado **Em tratamento**.
 4. **Miguel** regista a solução — estado **Resolvido**.
-5. **Sofia** confirma a resolução e fecha o ticket — estado **Fechado**.
+5. **Sofia** verifica e confirma a resolução e fecha o ticket, sem confirmação formal obrigatória de Ana — estado **Fechado**.
 
 **Percurso alternativo:** se Ana comunicar que o problema persiste, um ticket **Resolvido** regressa a **Em tratamento**, mantendo o técnico responsável, salvo reatribuição por Sofia.
 
@@ -37,11 +37,11 @@ O percurso é pequeno e demonstrável, mas cobre o ciclo de vida essencial do Sm
 | P1 | US-011 | Consulta de tickets com resposta até 3 segundos | MVP |
 | P1 | US-012 | Funcionamento no Chrome e Edge | MVP |
 
-**Nota:** A reatribuição de tickets prevista na US-004 faz parte do MVP, mesmo não sendo necessária ao percurso principal. P0 e P1 indicam a ordem de trabalho, não exclusões do MVP.
+**Nota:** A reatribuição de tickets prevista na US-004 faz parte do MVP, mesmo não sendo necessária ao percurso principal. P0 e P1 indicam a ordem de trabalho, não exclusões do MVP nem prioridades dos tickets. Não existe campo de prioridade por ticket no MVP.
 
 ## 3. Incluído no MVP e evolução posterior
 
-**Incluído:** autenticação; criação e consulta de tickets; atribuição e reatribuição; tratamento e resolução; regresso ao tratamento; supervisão e fecho; validações básicas; permissões; compatibilidade Chrome/Edge; meta provisória de resposta até 3 segundos.
+**Incluído:** autenticação; criação e consulta de tickets; atribuição e reatribuição; tratamento e resolução; regresso ao tratamento; supervisão e fecho; validações dos campos obrigatórios (título, descrição e categoria); permissões; compatibilidade Chrome/Edge; meta provisória de resposta até 3 segundos.
 
 **Fora do MVP:** aplicação móvel, notificações SMS, integração automática com email, resolução automática por IA e gestão avançada de SLA. Estas funcionalidades não serão especificadas nem implementadas nesta fase.
 
@@ -66,7 +66,7 @@ A reatribuição, o fecho exclusivo por Sofia e a proibição de reabrir tickets
 | Estados | Aberto, Em tratamento, Resolvido e Fechado. |
 | Reatribuição | Sofia pode reatribuir tickets, incluindo os que estão Em tratamento. |
 | Regresso ao tratamento | Ana pode devolver um ticket Resolvido a Em tratamento. |
-| Fecho | Apenas Sofia pode fechar um ticket Resolvido, após confirmar a resolução. |
+| Fecho | Apenas Sofia pode fechar um ticket Resolvido, após verificar a resolução, sem confirmação formal obrigatória de Ana. |
 | Ticket fechado | Não pode ser reaberto. |
 
 Estas regras devem continuar a ser verificadas na fase de testes.

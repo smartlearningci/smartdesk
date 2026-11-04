@@ -7,13 +7,13 @@
 | ID | Requisito | Descrição |
 |---|---|---|
 | RF-001 | Autenticação | Acesso através de email e palavra-passe, com identificação do perfil. |
-| RF-002 | Criação de tickets | Registar título, descrição e categoria: Equipamento, Software ou Acessos. |
+| RF-002 | Criação de tickets | Registar os campos obrigatórios título, descrição e categoria: Equipamento, Software ou Acessos. |
 | RF-003 | Consulta de tickets | Colaborador consulta os seus tickets; técnico consulta os atribuídos; responsável consulta todos. |
 | RF-004 | Atribuição e reatribuição | Sofia atribui ou reatribui tickets, incluindo os que estão Em tratamento. |
 | RF-005 | Início do tratamento | Técnico responsável altera o estado de Aberto para Em tratamento. |
 | RF-006 | Resolução | Técnico regista a solução e altera o estado para Resolvido. |
 | RF-007 | Regresso ao tratamento | Colaborador comunica que o problema persiste; ticket passa de Resolvido para Em tratamento. |
-| RF-008 | Fecho | Apenas Sofia pode fechar tickets Resolvidos, após confirmar a resolução. Tickets Fechados não podem ser reabertos. |
+| RF-008 | Fecho | Apenas Sofia pode fechar tickets Resolvidos após verificar e confirmar a resolução, sem confirmação formal obrigatória do colaborador. Tickets Fechados não podem ser reabertos. |
 | RF-009 | Supervisão | Sofia consulta tickets, categorias, estados e técnicos responsáveis. |
 
 ## 2. Requisitos não funcionais (RNF)
@@ -21,7 +21,7 @@
 | ID | Requisito | Critério de verificação |
 |---|---|---|
 | RNF-001 | Usabilidade | O colaborador consegue criar um ticket sem conhecimentos técnicos, com campos e mensagens compreensíveis. |
-| RNF-002 | Desempenho | As páginas principais respondem em até 3 segundos, em condições normais de utilização. Meta provisória aprovada. |
+| RNF-002 | Desempenho | As páginas principais respondem em até 3 segundos, em condições normais de utilização. Meta provisória aprovada; as páginas e condições de medição serão documentadas antes da execução dos testes. |
 | RNF-003 | Segurança | Acesso autenticado e operações limitadas às permissões de cada perfil. |
 | RNF-004 | Compatibilidade | A aplicação funciona no Chrome e Edge, em computador. |
 
@@ -74,7 +74,8 @@ O cenário US-011 requer medição de tempo em condições de utilização previ
 
 1. Autenticação por **email e palavra-passe**.
 2. Ana pode comunicar que o problema persiste e devolver um ticket de **Resolvido** a **Em tratamento**.
-3. Apenas Sofia pode fechar tickets **Resolvidos**, após confirmação da resolução.
-4. Meta provisória de resposta das páginas principais: **até 3 segundos**, em condições normais de utilização.
+3. Apenas Sofia pode fechar tickets **Resolvidos**, após verificar a resolução, sem confirmação formal obrigatória de Ana.
+4. Meta provisória de resposta das páginas principais: **até 3 segundos**, com condições de medição a documentar antes dos testes.
+5. **Título, descrição e categoria** são obrigatórios na criação de tickets.
 
 **Âmbito preservado:** perfis colaborador, técnico de suporte e responsável de TI; categorias Equipamento, Software e Acessos; estados Aberto, Em tratamento, Resolvido e Fechado. Fora do MVP: aplicação móvel, SMS, resolução automática por IA, integração de email e SLA complexo.
