@@ -106,7 +106,10 @@ Este comando remove os contentores e a rede, mas **preserva o volume** `smartdes
 | `src/database.py` | Ligação e esquema SQLite; usa `SMARTDESK_DB` |
 | `src/templates/`, `src/static/` | Interface HTML e CSS |
 | `scripts/create_demo_users.py` | Criação interativa de contas fictícias |
-| `tests/` | Testes unitários, integração e BDD |\n| `scripts/run_validation.py` | Executa os conjuntos e gera relatórios JUnit/HTML |\n| `scripts/generate_report.py` | Consolida os resultados sem considerar não executados como aprovados |\n| `reports/` | Resultados locais, excluídos do Git |
+| `tests/` | Testes unitários, integração e BDD |
+| `scripts/run_validation.py` | Executa os conjuntos e gera relatórios JUnit/HTML |
+| `scripts/generate_report.py` | Consolida os resultados sem considerar não executados como aprovados |
+| `reports/` | Resultados locais, excluídos do Git |
 | `docs/`, `features/` | Requisitos, critérios e cenários aprovados |
 
 ## Limites da demonstração
@@ -114,3 +117,11 @@ Este comando remove os contentores e a rede, mas **preserva o volume** `smartdes
 Um único serviço web, sem novos endpoints ou funcionalidades de negócio. A base SQLite é persistida num volume Docker. Não foi acrescentado `/health` porque ainda não foi aprovado. A aplicação **não está preparada para exposição pública**: faltam proteção CSRF e configuração HTTPS/cookies seguros. A chave de sessão de exemplo é deliberadamente fictícia e exclusiva deste laboratório.
 
 **Validação:** estes comandos são o procedimento previsto; a publicação do código, por si só, não comprova que Docker ou os testes tenham sido executados.
+
+## Balanço da demonstração local
+
+A sessão de demonstração local foi dada como terminada, mas **não foram fornecidos logs, relatórios de testes ou resultados observados**. Assim, não é possível afirmar que o arranque, o login ou qualquer teste tenha passado. Os procedimentos acima são instruções de execução, não evidência de sucesso.
+
+**Falhas observadas:** nenhuma foi comunicada; isto não significa ausência de falhas. **Limitações conhecidas:** T-11 exige medição real de desempenho; T-12 exige Chrome e Edge reais; a aplicação não está preparada para exposição pública (CSRF/HTTPS).
+
+**Próximos passos da formação:** recolher e analisar os relatórios reais (`reports/index.html` e JUnit XML), corrigir eventuais falhas comprovadas e prosseguir para as etapas de CI/CD e cloud sem alterar o MVP aprovado. Consultar [estado da validação](docs/qualidade/02_estado_implementacao.md).
