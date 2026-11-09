@@ -9,11 +9,11 @@ services:
       # SQLite é guardado num volume, não no sistema de ficheiros efémero.
       SMARTDESK_DB: /data/smartdesk.sqlite3
     ports:
-      # Acesso apenas pelo próprio computador do formando.
       - "127.0.0.1:8080:8000"
     volumes:
       - smartdesk_data:/data
+      # Os relatórios dos testes ficam acessíveis no computador.
+      - ./reports:/app/reports
 
-# Preserva utilizadores e tickets ao recriar o contentor.
 volumes:
   smartdesk_data:

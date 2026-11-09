@@ -78,10 +78,10 @@ Prima Ctrl+C para sair da visualização dos logs sem parar a aplicação.
 ### 7. Executar os testes dentro do Docker
 
 ```bash
-docker compose run --rm --no-deps web pytest -v
+docker compose run --rm --no-deps web python -m scripts.run_validation
 ```
 
-Os testes automatizados de regras, autenticação e HTTP estão em `tests/`; os testes de integração usam bases SQLite temporárias e isoladas. **A existência dos testes não significa que tenham sido executados ou aprovados.** O teste `test_bdd.py` verifica identificadores de cenários, mas não executa os 12 passos BDD. Permanecem pendentes a execução BDD integral, T-11 (desempenho) e T-12 (Chrome/Edge).
+O comando executa separadamente testes unitários, integração HTTP e cenários Gherkin com `pytest-bdd`, gerando `reports/index.html` e ficheiros JUnit XML/HTML por conjunto. **A existência dos testes não significa que tenham sido executados ou aprovados.** T-11 (desempenho) e T-12 (Chrome/Edge) permanecem explicitamente ignorados até à validação real. Consulte `docs/qualidade/03_plano_validacao.md` para condições iniciais, ações e resultados esperados.
 
 ### 8. Parar
 
@@ -106,7 +106,7 @@ Este comando remove os contentores e a rede, mas **preserva o volume** `smartdes
 | `src/database.py` | Ligação e esquema SQLite; usa `SMARTDESK_DB` |
 | `src/templates/`, `src/static/` | Interface HTML e CSS |
 | `scripts/create_demo_users.py` | Criação interativa de contas fictícias |
-| `tests/` | Testes unitários e de integração |
+| `tests/` | Testes unitários, integração e BDD |\n| `scripts/run_validation.py` | Executa os conjuntos e gera relatórios JUnit/HTML |\n| `scripts/generate_report.py` | Consolida os resultados sem considerar não executados como aprovados |\n| `reports/` | Resultados locais, excluídos do Git |
 | `docs/`, `features/` | Requisitos, critérios e cenários aprovados |
 
 ## Limites da demonstração
