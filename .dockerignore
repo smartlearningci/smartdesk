@@ -1,0 +1,21 @@
+# Não enviar ambientes locais, caches nem credenciais para o build.
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+*.sqlite
+.coverage
+htmlcov/
+.idea/
+.vscode/

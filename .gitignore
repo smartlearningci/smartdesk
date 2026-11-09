@@ -1,6 +1,10 @@
+# Ficheiros locais que nunca devem ser publicados.
 __pycache__/
 .pytest_cache/
 .venv/
 *.pyc
 *.sqlite3
+*.db
 .env
+.coverage
+htmlcov/

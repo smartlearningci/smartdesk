@@ -1,0 +1,19 @@
+# Um único serviço web; sem PostgreSQL, proxy ou serviços adicionais.
+services:
+  web:
+    build: .
+    # .env contém uma chave fictícia para a demonstração local.
+    env_file:
+      - .env
+    environment:
+      # SQLite é guardado num volume, não no sistema de ficheiros efémero.
+      SMARTDESK_DB: /data/smartdesk.sqlite3
+    ports:
+      # Acesso apenas pelo próprio computador do formando.
+      - "127.0.0.1:8080:8000"
+    volumes:
+      - smartdesk_data:/data
+
+# Preserva utilizadores e tickets ao recriar o contentor.
+volumes:
+  smartdesk_data:

@@ -1,54 +1,116 @@
 # SmartDesk — Sistema de Gestão de Pedidos de Suporte
 
-Projeto pedagógico da NexaServ (60 colaboradores, equipa de TI com três técnicos e uma responsável). O MVP transforma a [especificação aprovada](docs/produto/03_mvp_backlog_e_aceitacao.md) numa aplicação local com **Python, FastAPI, HTML e SQLite**.
+Projeto pedagógico da NexaServ: aplicação FastAPI, HTML simples e SQLite. Nesta sessão utiliza-se **Docker e Docker Compose**; não é necessário instalar Python, FastAPI ou SQLite no computador.
 
-## Funcionalidades e regras
+A [especificação aprovada](docs/produto/03_mvp_backlog_e_aceitacao.md), os [testes e a rastreabilidade](docs/qualidade/01_testes_e_rastreabilidade.md) e os [cenários Gherkin](features/tickets.feature) permanecem como referência.
 
-- Ana (colaboradora) cria e consulta os próprios tickets; pode comunicar que um ticket Resolvido continua com problema.
-- Miguel (técnico) consulta tickets atribuídos, inicia tratamento e regista soluções.
-- Sofia (responsável de TI) consulta todos, atribui e reatribui técnicos e fecha tickets Resolvidos após verificar a resolução, sem confirmação formal obrigatória de Ana.
-- Estados: **Aberto → Em tratamento → Resolvido → Fechado**. Um ticket Resolvido pode regressar a Em tratamento; Fechado não pode ser reaberto.
-- Categorias: **Equipamento, Software, Acessos**. Campos obrigatórios: título, descrição e categoria.
+## Funcionalidades do MVP
 
-## Estrutura
+- **Ana**, colaboradora: cria e consulta os próprios tickets; comunica quando um problema Resolvido persiste.
+- **Miguel**, técnico: consulta tickets atribuídos, inicia o tratamento e regista a resolução.
+- **Sofia**, responsável de TI: consulta todos os tickets, atribui ou reatribui técnicos e fecha os Resolvidos depois de verificar a solução (sem confirmação formal obrigatória de Ana).
+- Estados: **Aberto → Em tratamento → Resolvido → Fechado**; **Resolvido → Em tratamento** é permitido; **Fechado** não reabre.
+- Categorias: **Equipamento, Software, Acessos**. Título, descrição e categoria são obrigatórios.
 
-| Caminho | Responsabilidade |
-|---|---|
-| `src/main.py` | Rotas HTTP, formulários e apresentação de erros |
-| `src/services.py` | Regras de estados, validações e permissões |
-| `src/auth.py` | Autenticação e perfis |
-| `src/database.py` | Ligação e esquema SQLite |
-| `src/templates/` | Interface HTML |
-| `src/static/style.css` | Estilos |
-| `scripts/create_demo_users.py` | Contas fictícias locais |
-| `tests/` | Testes automatizados |
-| `docs/` e `features/` | Especificação e Gherkin aprovados |
+## Preparar e executar — apenas Docker Compose
 
-## Preparar e executar (Ubuntu/Linux, Python 3.11+)
+**Pré-requisito:** Docker com Docker Compose disponível e a funcionar (contentores Linux). Os comandos seguintes são executados na pasta do projeto. Não é necessário Python local.
+
+### 1. Obter o repositório
 
 ```bash
 git clone https://github.com/smartlearningci/smartdesk.git
 cd smartdesk
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-export SMARTDESK_SESSION_SECRET="$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
-python -m scripts.create_demo_users
-uvicorn src.main:app --reload
 ```
 
-Abrir **http://127.0.0.1:8000/login**. Contas fictícias: `ana@nexaserv.test`, `miguel@nexaserv.test`, `sofia@nexaserv.test`. O script solicita as palavras-passe; não existem palavras-passe de demonstração publicadas. A base de dados `smartdesk.sqlite3` é local e ignorada pelo Git.
+Se já tiver o repositório clonado, entre na pasta e execute `git pull`.
 
-## Testes
+### 2. Preparar a configuração local
 
 ```bash
-pytest -v
+cp .env.example .env
 ```
 
-Os testes têm objetivos e referências RF/US/T nos respetivos ficheiros. Cobrem regras de negócio, autenticação, permissões e percursos HTTP. **Não existe evidência de execução dos testes nesta publicação.** O teste `test_bdd.py` verifica os identificadores dos 12 cenários, mas **não executa os passos BDD**. Permanecem por validar a execução BDD completa, o tempo de resposta (T-11/RNF-002) e os navegadores Chrome/Edge (T-12/RNF-004). A documentação aprovada continua em [docs/](docs/) e [features/tickets.feature](features/tickets.feature).
+O exemplo já contém uma **chave de sessão fictícia** com mais de 32 caracteres. Não é necessário gerar outra chave para esta demonstração local. A chave `SMARTDESK_SESSION_SECRET` serve para assinar os cookies da aplicação; **não é uma palavra-passe de utilizador**. O ficheiro `.env` é ignorado pelo Git e pelo build Docker.
 
-## Limitações e próximos passos
+### 3. Construir a imagem
 
-Esta aplicação destina-se a uma demonstração **local**, não a produção. Os formulários não dispõem ainda de proteção CSRF e o cookie de sessão não está configurado para HTTPS obrigatório; **não expor à Internet**. As condições de medição de desempenho serão definidas antes do T-11.
+```bash
+docker compose build
+```
 
-Depois da validação integral, a formação prosseguirá para Docker, Compose, CI/CD e cloud, sem acrescentar funcionalidades de negócio ao MVP.
+O `Dockerfile` instala as dependências Python **dentro da imagem**, incluindo Jinja2 para os templates HTML.
+
+### 4. Criar os utilizadores de demonstração dentro do Docker
+
+**Executar antes do primeiro login:**
+
+```bash
+docker compose run --rm --no-deps -it web python -m scripts.create_demo_users
+```
+
+O script solicita interativamente uma palavra-passe para cada conta. Escolha uma palavra-passe simples **com pelo menos oito caracteres**, apenas para o laboratório. O terminal não apresenta os caracteres enquanto escreve; prima Enter após cada palavra-passe. Pode usar a mesma palavra-passe nas três contas de teste, se preferir, mas não utilize palavras-passe reais.
+
+| Perfil | Email de login |
+|---|---|
+| Ana Martins — colaboradora | `ana@nexaserv.test` |
+| Miguel Costa — técnico | `miguel@nexaserv.test` |
+| Sofia Almeida — responsável TI | `sofia@nexaserv.test` |
+
+As palavras-passe de login são guardadas como hashes na base de dados SQLite do volume Docker, **não** no `.env`, no `Dockerfile` ou no GitHub. Se as contas já existirem, o script não as recria.
+
+### 5. Iniciar a aplicação
+
+```bash
+docker compose up -d
+```
+
+Abrir **http://localhost:8080/login**. A porta está publicada apenas em `127.0.0.1:8080`, pelo que o acesso se destina ao próprio computador.
+
+### 6. Consultar logs
+
+```bash
+docker compose logs -f web
+```
+
+Prima Ctrl+C para sair da visualização dos logs sem parar a aplicação.
+
+### 7. Executar os testes dentro do Docker
+
+```bash
+docker compose run --rm --no-deps web pytest -v
+```
+
+Os testes automatizados de regras, autenticação e HTTP estão em `tests/`; os testes de integração usam bases SQLite temporárias e isoladas. **A existência dos testes não significa que tenham sido executados ou aprovados.** O teste `test_bdd.py` verifica identificadores de cenários, mas não executa os 12 passos BDD. Permanecem pendentes a execução BDD integral, T-11 (desempenho) e T-12 (Chrome/Edge).
+
+### 8. Parar
+
+```bash
+docker compose down
+```
+
+Este comando remove os contentores e a rede, mas **preserva o volume** `smartdesk_data` com os utilizadores e tickets. Não use `docker compose down -v` se quiser manter os dados.
+
+## Ficheiros e responsabilidades
+
+| Caminho | Função |
+|---|---|
+| `Dockerfile` | Imagem Python 3.12-slim, dependências e arranque Uvicorn |
+| `compose.yaml` | Serviço `web`, porta local 8080 e volume SQLite |
+| `.dockerignore` | Exclui ficheiros locais e segredos do contexto de build |
+| `.env.example` | Chave de sessão fictícia, pronta a copiar |
+| `requirements.txt` | Dependências Python, incluindo Jinja2 |
+| `src/main.py` | Interface HTTP e rotas FastAPI |
+| `src/services.py` | Regras de negócio e permissões |
+| `src/auth.py` | Autenticação e hashes de palavras-passe |
+| `src/database.py` | Ligação e esquema SQLite; usa `SMARTDESK_DB` |
+| `src/templates/`, `src/static/` | Interface HTML e CSS |
+| `scripts/create_demo_users.py` | Criação interativa de contas fictícias |
+| `tests/` | Testes unitários e de integração |
+| `docs/`, `features/` | Requisitos, critérios e cenários aprovados |
+
+## Limites da demonstração
+
+Um único serviço web, sem novos endpoints ou funcionalidades de negócio. A base SQLite é persistida num volume Docker. Não foi acrescentado `/health` porque ainda não foi aprovado. A aplicação **não está preparada para exposição pública**: faltam proteção CSRF e configuração HTTPS/cookies seguros. A chave de sessão de exemplo é deliberadamente fictícia e exclusiva deste laboratório.
+
+**Validação:** estes comandos são o procedimento previsto; a publicação do código, por si só, não comprova que Docker ou os testes tenham sido executados.
