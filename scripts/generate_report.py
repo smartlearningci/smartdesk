@@ -11,7 +11,7 @@ import re
 import xml.etree.ElementTree as ET
 
 EXPECTED = {f"T-{n:02d}" for n in range(1, 21)}
-SUITES = ("unit", "integration", "bdd")
+SUITES = ("unit", "integration", "bdd", "postgres")
 COLORS = {"aprovado": "#207343", "falhado": "#b42318",
           "erro": "#b42318", "ignorado": "#ad7700", "não executado": "#667085"}
 T_RE = re.compile(r"(?<![A-Za-z0-9])t(\d{2})(?!\d)", re.I)

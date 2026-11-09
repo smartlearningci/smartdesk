@@ -1,19 +1,36 @@
-# Um único serviço web; sem PostgreSQL, proxy ou serviços adicionais.
+# SmartDesk local: aplicação e PostgreSQL, sem exposição da base de dados.
 services:
-  web:
-    build: .
-    # .env contém uma chave fictícia para a demonstração local.
+  db:
+    image: postgres:16-alpine
     env_file:
       - .env
     environment:
-      # SQLite é guardado num volume, não no sistema de ficheiros efémero.
-      SMARTDESK_DB: /data/smartdesk.sqlite3
+      POSTGRES_DB: ${POSTGRES_DB:?Defina POSTGRES_DB no .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Defina POSTGRES_USER no .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+    restart: unless-stopped
+
+  web:
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:?}:${POSTGRES_PASSWORD:?}@db:5432/${POSTGRES_DB:?}
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "127.0.0.1:8080:8000"
     volumes:
-      - smartdesk_data:/data
-      # Os relatórios dos testes ficam acessíveis no computador.
       - ./reports:/app/reports
+    restart: unless-stopped
 
 volumes:
-  smartdesk_data:
+  postgres_data:

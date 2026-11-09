@@ -59,3 +59,7 @@ docker compose run --rm --no-deps web python -m scripts.run_validation
 São criados `reports/unit/junit.xml`, `reports/unit/index.html`, equivalentes em `integration/` e `bdd/`, e `reports/index.html` com o resumo global. O diretório `reports/` é montado no computador e ignorado pelo Git. A execução continua entre conjuntos mesmo após falhas e devolve código não zero quando algum conjunto falha.
 
 **Limitações:** o teste de desempenho T-11 exige condições de medição previamente definidas; T-12 exige execução em Chrome e Edge. O estado destes testes não pode ser aprovado com TestClient. A execução de testes e Docker deverá ser comprovada por resultados reais, não pela publicação do código.
+
+## Validação PostgreSQL V2
+
+O conjunto `postgres` usa `tests/test_postgres.py` com esquemas temporários e verifica inicialização idempotente, criação, leitura por nova ligação, atribuição, tratamento, resolução, fecho e operação proibida. Relatórios previstos em `reports/postgres/`. A persistência após recriação dos contentores (`docker compose down` e `up -d`, sem `-v`) exige ensaio operacional separado e evidência real. Os testes SQLite originais continuam isolados. A publicação do código não comprova resultados.

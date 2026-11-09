@@ -14,6 +14,7 @@ SUITES = {
     "unit": ["tests/test_ticket_rules.py", "tests/test_permissions.py", "tests/test_mvp.py"],
     "integration": ["tests/test_auth.py", "tests/test_api.py"],
     "bdd": ["tests/bdd/test_scenarios.py"],
+    "postgres": ["tests/test_postgres.py"],
 }
 
 def main():
